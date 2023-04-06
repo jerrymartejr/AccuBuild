@@ -1,0 +1,163 @@
+{% extends "estimate/layout.html" %}
+
+{% block title %}
+    {{ project.name }}
+{% endblock %}
+
+{% block main %}
+
+<div class="container">
+    <nav class="project_nav">
+        <ul>
+          <li>
+            <a href="{% url 'project' project.id %}">Summary</a>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <a href="{% url 'detailed' project.id %}">Detailed</a>
+          </li>
+        </ul>
+    </nav>      
+    <h2 class="second-header" style="font-size: 2rem;">{{ project.name }}</h2>
+    <h2 class="second-header">Project Estimate</h2>
+    
+    <table class="project_table">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Qty</th>
+                <th>Unit</th>
+                <th>Material</th>
+                <th>Labor</th>
+                <th>Equipment</th>
+                <th>Direct Cost</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for division in divisions %}
+                <tr>
+                    <th colspan="7">{{ division.name }}</th>
+                </tr>
+                {% for scope in division.scopes.all %}
+                    <tr>
+                        <td>{{ scope.name }}</td>
+                        <td>{{ scope.qty }}</td>
+                        <td>{{ scope.unit }}</td>
+                        <td>{{ scope.material }}</td>
+                        <td>{{ scope.labor }}</td>
+                        <td>{{ scope.equipment }}</td>
+                        <td>{{ scope.direct_cost }}</td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="3" style="text-align: right;"><b>Subtotal</b></td>
+                    <td>{{ division.division_costs.first.material }}</td>
+                    <td>{{ division.division_costs.first.labor }}</td>
+                    <td>{{ division.division_costs.first.equipment }}</td>
+                    <td>{{ division.division_costs.first.direct_cost }}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="3" style="text-align: right;"><b>TOTAL</b></td>
+                <td>{{ project.material }}</td>
+                <td>{{ project.labor }}</td>
+                <td>{{ project.equipment }}</td>
+                <td>{{ project.direct_cost }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <br>
+    <h2>Summary</h2>
+    <table class="project_summary">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Direct Cost</th>
+                <th>OCM</th>
+                <th>Profit</th>
+                <th>Total Cost</th>
+                <th>VAT</th>
+                <th>Total Cost w/VAT</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Materials</td>
+                <td>{{ project.material }}</td>
+                <td>{{ project.ocm }} %</td>
+                <td>{{ project.profit }} %</td>
+                <td>{{ project.material_no_vat }}</td>
+                <td>{{ project.vat }} %</td>
+                <td>{{ project.material_w_vat }}</td>
+            </tr>
+            <tr>
+                <td>Labor</td>
+                <td>{{ project.labor }}</td>
+                <td>{{ project.ocm }} %</td>
+                <td>{{ project.profit }} %</td>
+                <td>{{ project.labor_no_vat }}</td>
+                <td>{{ project.vat }} %</td>
+                <td>{{ project.labor_w_vat }}</td>
+            </tr>
+            <tr>
+                <td>Equipment</td>
+                <td>{{ project.equipment }}</td>
+                <td>{{ project.ocm }} %</td>
+                <td>{{ project.profit }} %</td>
+                <td>{{ project.equipment_no_vat }}</td>
+                <td>{{ project.vat }} %</td>
+                <td>{{ project.equipment_w_vat }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <br>
+    <form action="{% url 'update_markup' project.id %}" method="post" id="update_markup">
+        {% csrf_token %}
+        <label for="ocm">OCM</label>
+        <input type="text" name="ocm" id="ocm" value="{{ project.ocm }}">
+        <br>
+        <label for="profit">Profit</label>
+        <input type="text" name="profit" id="profit" value="{{ project.profit }}">
+        <br>
+        <input type="submit" value="Update">
+    </form>
+    <br>
+    <br>
+    {% if project.estimator == user and project.progress == 'revise' %}
+    <p>Manager comment/s: <span style="color: red;">{{ project.reject_msg }}</span></p>
+    {% endif %}
+    <br>
+    {% if project.estimator == user and project.progress == 'on-going' %}
+    <form action="{% url 'submit_for_approval' project.id %}" method="post" class="response_form">
+        {% csrf_token %}
+        <input type="submit" value="Submit">
+    </form>
+    {% endif %}
+    
+    {% if project.estimator == user and project.progress == 'revise' %}
+    <form action="{% url 'submit_for_approval' project.id %}" method="post" class="response_form">
+        {% csrf_token %}
+        <input type="submit" value="Resubmit">
+    </form>
+    {% endif %}
+    
+    {% if project.manager == user and project.progress == 'pending for approval' %}
+    <form action="{% url 'approve_project' project.id %}" method="post" class="response_form">
+        {% csrf_token %}
+        <input type="submit" value="Approve">
+    </form>
+    <br>
+    <form action="{% url 'reject_project' project.id %}" method="post" class="response_form">
+        {% csrf_token %}
+        <input type="text" name="reject_msg">
+        <br>
+        <input type="submit" value="Revise">
+    </form>
+    {% endif %}
+</div>
+
+
+{% endblock %}

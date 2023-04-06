@@ -1,0 +1,62 @@
+{% extends "estimate/layout.html" %}
+
+{% load static %}
+
+{% block title %}
+    Dashboard
+{% endblock %}
+
+{% block main %}
+
+
+
+<div class="container db-header" style="padding-bottom: 0;">
+    <h2 class="second-header">Hello, {{ user }}</h2>
+
+    <div id="create-button">
+        <button class="fix-this">
+            <a href="{% url 'create_new_project' %}">Create New Project</a>
+        </button>
+    </div>
+</div>
+
+<div class="container" style="padding-bottom: 0;">
+    <h3 class="small-db-header">Project Dashboard</h3>
+    <div class="charts" style="padding-bottom: 0;">
+        <div class="chart-container">
+            {{div| safe}}
+        </div>
+        <div class="chart-container">
+            {{div1| safe}}
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <h3 class="small-db-header">All Projects</h3>
+    <div class="recent project-container">
+        {% for project in projects %}
+        <a href="{% url 'project' project.id %}" class="file-card">
+            <div>
+                <img src="{% static 'estimate/client_logos/' %}{{ project.client.image }}" alt="{{ project.client }} logo" style="height: 100px; width: 180px;">
+            </div>
+            <div class="file-details">
+                <p class="name">{{ project.name }}</p>
+                <p class="client">{{ project.client }}</p>
+                <p class="status">{{ project.status }}</p>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block bok %}
+<script src="https://cdn.bokeh.org/bokeh/release/bokeh-3.0.3.min.js"></script>
+<script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-3.0.3.min.js"></script>
+<script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-3.0.3.min.js"></script>
+<script src="https://cdn.bokeh.org/bokeh/release/bokeh-api-3.0.3.min.js"></script>
+{{script| safe}}
+{{script1| safe}}
+{% endblock %}

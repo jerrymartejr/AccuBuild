@@ -1,0 +1,98 @@
+{% extends "estimate/layout.html" %}
+
+{% load static %}
+
+{% block title %}
+Create New Project
+{% endblock %}
+
+{% block main %}
+
+<div class="container">
+    <form action="{% url 'create_new_project' %}" method="post" class="new_project_form">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <p>
+            {{ form.name.errors }}
+            <label for="{{ form.name.id_for_label}}">Project Title: </label>
+            {{ form.name }}
+        </p>
+        <p>
+            {{ form.client.errors }}
+            <label for="{{ form.client.id_for_label}}">Client: </label>
+            {{ form.client }}
+        </p>
+        <div id="add-container">
+            <button id="add_new_client_btn">Add Client</button>
+        </div>
+        <p>
+            {{ form.address.errors }}
+            <label for="{{ form.address.id_for_label}}">Address: </label>
+            {{ form.address }}
+        </p>
+        <p>
+            {{ form.description.errors }}
+            <label for="{{ form.description.id_for_label}}">Description: </label>
+            {{ form.description }}
+        </p>
+        <p>
+            {{ form.status.errors }}
+            <label for="{{ form.status.id_for_label}}">Status: </label>
+            {{ form.status }}
+        </p>
+        <p>
+            {{ form.area.errors }}
+            <label for="{{ form.area.id_for_label}}">Area (sq.m): </label>
+            {{ form.area }}
+        </p>
+        <p>
+            {{ form.bid_deadline.errors }}
+            <label for="{{ form.bid_deadline.id_for_label}}">Bid Deadline: </label>
+            {{ form.bid_deadline }}
+        </p>
+        <p>
+            {{ form.estimator.errors }}
+            <label for="{{ form.estimator.id_for_label}}">Estimator: </label>
+            {{ form.estimator }}
+        </p>
+        <p>
+            {{ form.manager.errors }}
+            <label for="{{ form.manager.id_for_label}}">Manager: </label>
+            {{ form.manager }}
+        </p>
+        <p>
+            {{ form.divisions.errors }}
+            <label for="{{ form.divisions.id_for_label}}">Division/s: </label>
+            {{ form.divisions }}
+        </p>
+        <input type="submit" value="Create New Project">
+    </form>
+</div>
+
+<div id="add_new_client_modal" class="modal">
+    <div class="modal_content">
+        <form action="{% url 'add_new_client' %}" id="add_new_client" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form1.non_field_errors }}
+            <p>
+                {{ form1.name.errors }}
+                <label for="{{ form1.name.id_for_label}}">Client: </label>
+                {{ form1.name }}
+            </p>
+            <p>
+                {{ form1.address.errors }}
+                <label for="{{ form1.address.id_for_label}}">Address: </label>
+                {{ form1.address }}
+            </p>
+            <p>
+                {{ form1.image.errors }}
+                <label for="{{ form1.image.id_for_label}}">Logo: </label>
+                {{ form1.image }}
+            </p>
+            <input type="submit" value="Create New Client">
+        </form>
+    </div>
+</div>
+
+
+{% endblock %}

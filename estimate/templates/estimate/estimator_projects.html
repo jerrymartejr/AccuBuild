@@ -1,0 +1,30 @@
+{% extends "estimate/layout.html" %}
+
+{% load static %}
+
+{% block title %}
+    My Projects
+{% endblock %}
+
+{% block main %}
+
+<br>
+<div class="container">
+    <h3 class="small-db-header">My Projects</h3>
+    <div class="recent project-container">
+        {% for project in projects %}
+        <a href="{% url 'project' project.id %}" class="file-card">
+            <div>
+                <img src="{% static 'estimate/client_logos/' %}{{ project.client.image }}" alt="{{ project.client }} logo" style="height: 100px; width: 180px;">
+            </div>
+            <div class="file-details">
+                <p class="name">{{ project.name }}</p>
+                <p class="client">{{ project.client }}</p>
+                <p class="status">{{ project.status }}</p>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

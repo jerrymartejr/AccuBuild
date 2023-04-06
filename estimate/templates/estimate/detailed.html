@@ -1,0 +1,109 @@
+{% extends "estimate/layout.html" %}
+
+{% block title %}
+    {{ project.name }}
+{% endblock %}
+
+{% block main %}
+<div class="container">
+    <nav class="project_nav">
+        <ul>
+            <li><a href="{% url 'project' project.id %}">Summary</a></li>
+        </ul>
+        <ul>
+            <li><a href="{% url 'detailed' project.id %}">Detailed</a></li>
+        </ul>
+    </nav>
+    <h2 class="second-header" style="font-size: 2rem;">{{ project.name }}</h2>
+    <div style="display: flex;">
+        <table style="flex: 1;" class="detailed_table">
+            <thead>
+                <tr>
+                    <th colspan="2">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for division in divisions %}
+                    <tr>
+                        <th style="border-right: 0;">{{ division.name }}</th>
+                        <th style="border-left: 0; width: 30%;">
+                            <form action="{% url 'remove_division' project.id %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="division_id" value="{{ division.id }}">
+                                <input type="submit" value="Delete">
+                            </form>
+                        </th>
+                    </tr>
+                    {% for scope in division.scopes.all %}
+                        <tr>
+                            <td style="border-right: 0;" id="scope"><a href="#" id="{{ scope.name }}" onclick="showScopeItems('{{ scope.id }}')">{{ scope.name }}</a></td>
+                            <td style="border-left: 0; width: 30%;">
+                                <form action="{% url 'remove_scope' project.id %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="scope_id" value="{{ scope.id }}">
+                                    <input type="submit" value="Delete">
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+        <div id="scope_items" style="flex: 3;">
+    
+        </div>
+    </div>
+    <br>
+    <button id="add_data_btn">Add Data</button>
+    <div class="modal1">
+        <div class="modal_content1">
+            <h2 class="second-header">Add Division/s</h2>
+            <form action="{% url 'add_divisions' project.id %}" method="post">
+                {% csrf_token %}
+                {{ form }}
+                <input type="submit" value="Add Division/s">
+            </form>
+            <hr>
+            <h2 class="second-header">Add New Division</h2>
+            <form action="{% url 'add_new_division' project.id %}" method="post">
+                {% csrf_token %}
+                {{ form2 }}
+                <input type="submit" value="Add New Division">
+            </form>
+            <hr>
+            <h2 class="second-header"><h2 class="second-header">Add Scope</h2></h2>
+            <form action="{%url 'add_scope' project.id %}" method="post">
+                {% csrf_token %}
+                {{ form1 }}
+                <input type="submit" value="Add Scope">
+            </form>
+            <hr>
+            <h2 class="second-header">Add Item</h2>
+            <form action="{% url 'add_item' project.id %}" method="post">
+                {% csrf_token %}
+                {{ form3 }}
+                <input type="submit" value="Add Item">
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const modal1 = document.querySelector(".modal1");
+    const add_data_btn = document.querySelector("#add_data_btn");
+
+    add_data_btn.addEventListener('click', () => {
+        modal1.style.display = "block";
+    });
+
+    window.addEventListener('click', (event) => {
+        if (event.target == modal1) {
+        modal1.style.display = "none";
+        }
+    });
+});
+</script>
+
+
+{% endblock %}

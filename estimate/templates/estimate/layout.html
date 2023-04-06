@@ -1,0 +1,90 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, width=device-width">
+        <meta name="author" content="Jerry Marte">
+        <meta name="description" content="AccuBuild is online take-off, estimating and bidding software for construction professionals.">
+        <link rel="icon" type="image/x-icon" href="{% static 'estimate/images/accubuild-logo.png' %}">
+        <link href="{% static 'estimate/styles.css' %}" rel="stylesheet">
+        <link href="http://cdn.pydata.org/bokeh/release/bokeh-3.0.3.min.css" rel=”stylesheet” type=”text/css”>
+        <link href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-3.0.3.min.css" rel=”stylesheet” type=”text/css”>
+        {% block script %}
+        <script src="{% static 'estimate/main.js' %}" defer></script>
+        {% endblock %}
+        <title>AccuBuild - {% block title %}{% endblock %}</title>
+    </head>
+    <body>
+        <header class="primary-header flex">
+            <div class="logo flex">
+                <a href="{% url 'index' %}">
+                    <img src="{% static 'estimate/images/accubuild-logo.png' %}" style="height: 25px;">
+                </a>
+            </div>
+            <button class="mobile-nav-toggle" aria-controls="primary-navigation" aria-expanded="false">
+                <span class="sr-only">Menu</span>
+            </button>
+            <nav>
+                <ul id="primary-navigation" data-visible="false" class="primary-navigation flex">
+                    
+                    {% if user.is_authenticated %}
+                    <li>
+                        <a href="{% url 'dashboard' %}">Dashboard</a>
+                    </li>
+                        {% if user.role == 'estimator' %}
+                        <li>
+                            <a href="{% url 'estimator_projects' %}">My Projects</a>
+                        </li>
+                        {% endif %}
+                        {% if user.role == 'manager' %}
+                        <li>
+                            <a href="{% url 'manager_projects' %}">My Projects</a>
+                        </li>
+                        {% endif %}
+                    <li>
+                        <a href="{% url 'logout' %}">Log Out</a>
+                    </li>
+
+                    {% else %}
+                    <li>
+                        <a href="{% url 'index' %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'login' %}">Log In</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'register' %}">Sign Up</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </header>
+        <main>
+            {% block main %}{% endblock %}
+        </main>
+        <footer>
+            Copyright &#169; 2023 | AccuBuild
+        </footer>
+    </body>
+    {% block bok %}{% endblock %}
+    <script>
+        const primaryNav = document.querySelector(".primary-navigation");
+        const navToggle = document.querySelector(".mobile-nav-toggle");
+
+        navToggle.addEventListener("click", () => {
+            const visibility = primaryNav.getAttribute("data-visible");
+
+            if (visibility === "false") {
+                primaryNav.setAttribute("data-visible", true);
+                navToggle.setAttribute("aria-expanded", true);
+            }
+            else if (visibility === "true") {
+                primaryNav.setAttribute("data-visible", false);
+                navToggle.setAttribute("aria-expanded", false);
+            }
+        })
+    </script>
+</html>

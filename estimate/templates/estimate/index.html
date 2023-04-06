@@ -1,0 +1,37 @@
+{% extends "estimate/layout.html" %}
+{% load static %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block main %}
+
+<div class="container">
+    <div class="home">
+        <h2>ONLINE TAKE-OFF, ESTIMATING & BIDDING SOFTWARE</h2>
+        <h1>BUILD WITH PRECISION  BUILD WITH ACCUBUILD</h1>
+        <p>
+            Create and access your material take-offs and estimates in your smartphone or desktop.
+        </p>
+        <p>
+            Organize your estimates per project, create summarized and detailed quotations & bids.
+        </p>
+        <div class="home-carousel">
+            <div>
+                <img src="{% static 'estimate/images/dashboard.png' %}">
+                <p>Dashboard</p>
+            </div>
+            <div>
+                <img src="{% static 'estimate/images/summary.png' %}">
+                <p>Summary</p>
+            </div>
+            <div>
+                <img src="{% static 'estimate/images/detailed.PNG' %}">
+                <p>Detailed</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

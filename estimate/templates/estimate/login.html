@@ -1,0 +1,69 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, width=device-width">
+        <meta name="author" content="Jerry Marte">
+        <meta name="description" content="AccuBuild is online take-off, estimating and bidding software for construction professionals.">
+        <link rel="icon" type="image/x-icon" href="{% static 'estimate/images/accubuild-logo.png' %}">
+        <link href="{% static 'estimate/styles.css' %}" rel="stylesheet">
+        <title>AccuBuild - Login</title>
+    </head>
+    <body>
+        <main>
+            <div class="split full-height">
+                <div class="login-form-wrapper flex">
+                    <header class="login-header flex">
+                        <div class="logo flex">
+                            <img src="{% static 'estimate/images/accubuild-logo.png' %}" style="height: 35px;">
+                        </div>
+                    </header>
+                    <h2 class="secondary-header">Welcome back!</h2>
+                    <p class="small-header">Login to your account</p>
+                    <div class="login-form flex">
+                        <form action="{% url 'login' %}" method="post">
+                            {% csrf_token %}
+                            {% for field in form %}
+                            <p>
+                                <label for="{{ field.id_for_label }}" class="login-label">{{ field.label }}</label>
+                                <br>
+                                {{ field }}
+                                <br>
+                                {{ field.errors }}
+                            </p>
+                            {% endfor %}
+                            <p>
+                                <input type="submit" value="Log In" class="fix-this" id="login-button">
+                            </p>
+                        </form>
+                    </div>
+                    <p class="redirect">Don't have an account? <a href="{% url 'register' %}">Sign Up Now</a></p>
+                </div>
+                <div class="right-pane">
+                    <h2>ONLINE TAKE-OFF, ESTIMATING & BIDDING SOFTWARE</h2>
+                    <h1>Build with precision, build with AccuBuild.</h1>
+                    <p>
+                        Create and access your material take-offs and estimates in your smartphone or desktop.
+                    </p>
+                    <div class="carousel">
+                        <div>
+                            <img src="{% static 'estimate/images/dashboard.png' %}">
+                            <p>Dashboard</p>
+                        </div>
+                        <div>
+                            <img src="{% static 'estimate/images/summary.png' %}">
+                            <p>Summary</p>
+                        </div>
+                        <div>
+                            <img src="{% static 'estimate/images/detailed.PNG' %}">
+                            <p>Detailed</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>
